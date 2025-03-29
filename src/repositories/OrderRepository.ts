@@ -86,6 +86,53 @@ class OrderRepository {
             throw JSON.stringify({error: "Internal Server Error"});
         }
     }
+	public async addComment({
+		id,
+		rating,
+		comment
+	}: {
+		id: number;
+		rating : string;
+		comment: string;
+	}): Promise<order | null> {
+		try {
+			const response = await db.order.update({
+				where: { id: id },
+				data: { 
+					rating: rating,
+					comment: comment
+				}
+			});
+			return response;
+		} catch (error) {
+			if (error instanceof PrismaClientKnownRequestError) {
+				throw JSON.stringify({error: error.message});
+			}
+			throw JSON.stringify({error: "Internal Server Error"});
+		}
+	}
+	public async addReplyAdmin({
+		id,
+		reply_admin
+	}: {
+		id: number;
+		reply_admin: string;
+	}): Promise<order | null> {
+		try {
+			const response = await db.order.update({
+				where: { id: id },
+				data: { 
+					reply_admin: reply_admin
+				}
+			});
+			return response;
+		} catch (error) {
+			if (error instanceof PrismaClientKnownRequestError) {
+				throw JSON.stringify({error: error.message});
+			}
+			throw JSON.stringify({error: "Internal Server Error"});
+		}
+	}
 }
 
 
