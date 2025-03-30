@@ -7,6 +7,8 @@ const OrderController = new Elysia({
 	tags: ["Order"],
 })
 
+// Finish Order Controller / Repository / Schema
+
 OrderController.get(
 	"/getAll",
 	async () => {

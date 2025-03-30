@@ -6,6 +6,8 @@ const CartController = new Elysia({
     tags: ["Cart"],
 })
 
+// Finish Cart Controller / Repository / Schema
+
 CartController.get(
     "/getCart/:user_id",
     async ({ params: { user_id } }) => {
