@@ -1,0 +1,61 @@
+services:
+  backend:
+    depends_on:
+      adoptme-postgres:
+        condition: service_healthy
+      s3.services:
+        condition: service_started
+    image: sarikaopas/adoptme-backend:latest
+    container_name: adoptme-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - adoptme-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: sh -c "bunx prisma db push && bun src/index.ts"
+    restart: always
+
+  adoptme-postgres:
+    image: postgres:16
+    container_name: adoptme-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=1234
+    networks:
+      - adoptme-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  s3.services:
+    image: prakasitj/s3-mobile-service:latest
+    container_name: s3-mobile-service
+    ports:
+      - "9000:3000"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - AWS_ENDPOINT=${AWS_ENDPOINT}
+      - AWS_REGION=${AWS_DEFAULT_REGION}
+      - AWS_S3_FORCE_PATH_STYLE=${AWS_USE_PATH_STYLE_ENDPOINT}
+    networks:
+      - adoptme-network
+    restart: always
+
+networks:
+  adoptme-network:
+    external: true
+
+volumes:
+  postgres-data:

@@ -1,4 +1,4 @@
-FROM oven/bun
+FROM oven/bun:1.2.2
 WORKDIR /usr/src/app
 
 COPY package.json .

@@ -26,12 +26,11 @@ app.use(
         { name: "Cart", description: "Cart endpoint" },
       ],
     },
-  })
+  }),
 );
 
-
 app.use(middleware);
-app.use(UserController)
+app.use(UserController);
 app.use(PetController);
 app.use(AdpotionsController);
 app.use(ProductController);
@@ -45,12 +44,17 @@ app.get(
   () => {
     return redirect("/docs");
   },
-  { detail: { tags: ["Home"], summary: "Home", description: "Redirect to API docs" } }
+  {
+    detail: {
+      tags: ["Home"],
+      summary: "Home",
+      description: "Redirect to API docs",
+    },
+  },
 );
-
 
 app.listen(3000);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );
